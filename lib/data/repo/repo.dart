@@ -15,11 +15,16 @@ class Repo {
         log('Fetching from remote');
         final user = await remote.getUserFromServer();
 
-        // save to local
+        // sync local storage with server
         if (user != null) {
           log('Saving to local storage');
           await local.saveUserToLocal(user);
           return user;
+        } else {
+          // server returned null, clear local storage
+          log('Server returned null, clearing local storage');
+          await local.clearUserFromLocal();
+          return null;
         }
       }
 

@@ -14,4 +14,9 @@ class LocalDataSource {
     await Future.delayed(const Duration(milliseconds: 100));
     _cachedUser = user;
   }
+
+  Future<void> clearUserFromLocal() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    _cachedUser = null;
+  }
 }

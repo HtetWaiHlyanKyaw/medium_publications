@@ -1,0 +1,65 @@
+medium_publications/
+│
+├── lib/
+│   ├── main.dart
+│   ├── home_screen.dart
+│   │
+│   ├── model/
+│   │   └── user.dart
+│   │
+│   └── data/
+│       ├── repo/
+│       │   └── repo.dart
+│       │
+│       └── source/
+│           ├── local_data_source.dart
+│           └── remote_data_source.dart
+│
+├── test/
+│   └── widget_test.dart
+│
+├── android/
+│   ├── app/
+│   │   ├── build.gradle.kts
+│   │   └── src/
+│   ├── build.gradle.kts
+│   ├── gradle/
+│   │   └── wrapper/
+│   ├── gradle.properties
+│   ├── settings.gradle.kts
+│   └── ...
+│
+├── ios/
+│   ├── Flutter/
+│   ├── Runner/
+│   ├── Runner.xcodeproj/
+│   ├── Runner.xcworkspace/
+│   └── RunnerTests/
+│
+├── web/
+│   ├── index.html
+│   ├── manifest.json
+│   ├── favicon.png
+│   └── icons/
+│
+├── windows/
+│   ├── CMakeLists.txt
+│   ├── flutter/
+│   └── runner/
+│
+├── linux/
+│   ├── CMakeLists.txt
+│   ├── flutter/
+│   └── runner/
+│
+├── macos/
+│   ├── Flutter/
+│   ├── Runner/
+│   ├── Runner.xcodeproj/
+│   └── RunnerTests/
+│
+├── pubspec.yaml
+├── pubspec.lock
+├── analysis_options.yaml
+├── README.md
+└── .gitignore
