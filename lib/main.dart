@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medium_publications/feature/cat/presentation/view/cat_screen.dart';
+import 'package:medium_publications/null_aware_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,6 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: CatScreen());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: NullAwareScreen(),
+    );
   }
 }
