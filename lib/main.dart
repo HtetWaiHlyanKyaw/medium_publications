@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medium_publications/null_aware_screen.dart';
+import 'package:medium_publications/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: NullAwareScreen(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
   }
 }
