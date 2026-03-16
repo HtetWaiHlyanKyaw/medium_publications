@@ -1,64 +1,116 @@
 import 'package:flutter/material.dart';
-import 'package:medium_publications/data/repo/repo.dart';
-import 'package:medium_publications/model/user.dart';
+import 'package:medium_publications/core/theme/app_theme.dart';
+import 'package:medium_publications/core/util/app_util.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final Repo repo = Repo();
-  User? user;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isDark = AppTheme.isDark(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Online / Offline Data Demo')),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(user?.name ?? 'Unknown'),
-                  const SizedBox(height: 10),
-                  Text(user?.email ?? 'Unknown'),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: isLoading ? null : _getUser,
-                    child: const Text('Refresh'),
-                  ),
-                ],
+      appBar: AppBar(
+        title: const Text('Theme Demo'),
+        leading: ValueListenableBuilder<ThemeMode>(
+          valueListenable: AppTheme.themeNotifier,
+          builder: (context, themeMode, child) {
+            return IconButton(
+              onPressed: () {
+                AppTheme.toggleTheme();
+              },
+              icon: Icon(
+                isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
               ),
+            );
+          },
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset('assets/image.png'),
+                          ),
+                          Positioned(
+                            top: 12,
+                            right: 12,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.surface.withAlpha(
+                                  128,
+                                ),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Best Seller',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: context.colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Clean Code',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                'Robert C. Martin',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            '\$ 60.0',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 12),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: () {},
+                          child: Text('Buy Now'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
-  }
-
-  Future<void> _getUser() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      final fetchedUser = await repo.getUser();
-      setState(() {
-        user = fetchedUser;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medium_publications/core/theme/app_theme.dart';
 import 'package:medium_publications/home_screen.dart';
 
 void main() {
@@ -10,6 +11,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen());
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppTheme.themeNotifier,
+      builder: (context, themeMode, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          // remove valueListenableBuilder and use ThemeMode.system to adapt system theme without a toggle button
+          // themeMode: ThemeMode.system,
+          themeMode: themeMode,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          home: const HomeScreen(),
+        );
+      },
+    );
   }
 }
