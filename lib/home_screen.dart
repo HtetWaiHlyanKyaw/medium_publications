@@ -1,116 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:medium_publications/core/theme/app_theme.dart';
-import 'package:medium_publications/core/util/app_util.dart';
+import 'package:medium_publications/api_service.dart';
+import 'package:medium_publications/profile_page.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _isLoading = false;
+  bool _isAuthenticated = ApiService.instance.isAuthenticated;
+
+  @override
   Widget build(BuildContext context) {
-    final isDark = AppTheme.isDark(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Theme Demo'),
-        leading: ValueListenableBuilder<ThemeMode>(
-          valueListenable: AppTheme.themeNotifier,
-          builder: (context, themeMode, child) {
-            return IconButton(
-              onPressed: () {
-                AppTheme.toggleTheme();
-              },
-              icon: Icon(
-                isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-              ),
-            );
-          },
-        ),
+        title: Text('Home Page'),
+        actions: [
+          if (_isLoading)
+            CircularProgressIndicator()
+          else if (!_isAuthenticated)
+            FilledButton(onPressed: authenticate, child: Text('Login'))
+          else
+            FilledButton(onPressed: logout, child: Text('Logout')),
+
+          SizedBox(width: 16),
+        ],
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset('assets/image.png'),
-                          ),
-                          Positioned(
-                            top: 12,
-                            right: 12,
-                            child: Container(
-                              padding: EdgeInsets.all(4),
-
-                              decoration: BoxDecoration(
-                                color: context.colorScheme.surface.withAlpha(
-                                  128,
-                                ),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                'Best Seller',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: context.colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Clean Code',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Text(
-                                'Robert C. Martin',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            '\$ 60.0',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 12),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: FilledButton(
-                          onPressed: () {},
-                          child: Text('Buy Now'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+        child: FilledButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
           ),
+          child: Text('Profile Page'),
         ),
       ),
     );
+  }
+
+  void authenticate() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    _isAuthenticated = await ApiService.instance.authenticate();
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void logout() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    _isAuthenticated = !await ApiService.instance.logout();
+    setState(() {
+      _isLoading = false;
+    });
   }
 }
